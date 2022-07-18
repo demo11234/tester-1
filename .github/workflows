@@ -1,0 +1,88 @@
+import os
+import ssl
+import requests
+import json
+from github import Github
+#from slack import WebClient
+
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
+# First create a Github instance:
+
+# using an access token
+g = Github("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")
+repo_name=[]
+uppercase_repo=[]
+# Then play with your Github objects:
+for repo in g.get_user().get_repos():
+    repo_name.append(repo.name)
+
+# print(repo_name)
+
+
+############# Find any charector in upper case ###########
+for ele in repo_name:
+    if ele.islower():
+        continue
+    else:
+        uppercase_repo.append(ele)
+print(uppercase_repo)
+
+
+#slack_token = 'xoxb-1916057361248-3677321513906-BHSbXBsBhOkio0Pvi6q9U2vF'
+#slack_channel = '#general-development-leads'
+#slack_icon_emoji = ':see_no_evil:'
+#slack_user_name = 'GitOps'
+#image_url = 'https://media.giphy.com/media/3oFzm6RXiQbsrSoD6M/giphy.gif'
+
+#def post_message_to_slack(text, blocks = None):
+ #   return requests.post('https://slack.com/api/chat.postMessage', {
+  #      'token': slack_token,
+   #     'channel': slack_channel,
+    #    'text': text,
+     #   'icon_emoji': slack_icon_emoji,
+      #  'username': slack_user_name,
+       # 'image_url': image_url,
+   #     'blocks': json.dumps(blocks) if blocks else None
+   # }).json()
+
+# for slack in uppercase_repo:
+#     slack_info = "{}".format(slack)
+#     # slack_info = "{}\nPlease do not use Uppercase in repo name, need to follow GitOps Naming convention:- https://rapidinnovation.atlassian.net/l/c/ZpFEaZiM ".format(slack)
+#     post_message_to_slack(slack_info)
+# post_message_to_slack(f"https://media.giphy.com/media/3oFzm6RXiQbsrSoD6M/giphy.gif Please do not use Uppercase in repo name, need to follow GitOps Naming convention:- https://rapidinnovation.atlassian.net/l/c/ZpFEaZiM ")
+
+
+######### Not As Per Naming Convention ###############
+platform=['api', 'service', 'web', 'mobile', 'infra', 'example', 'package', 'test', 'challange', 'docs', 'script', 'research', 'k8s']
+technology=['android', 'angular', 'appium', 'awscli', 'certificates', 'cloudformation', 'csharp', 'dotnet', 'flink', 'ios', 'java', 'javascript', 'jupyter', 'yaml', 'kotlin', 'markdown', 'node', 'openapi', 'postman', 'python', 'r', 'rails', 'react', 'reactnative', 'ruby', 'selenium', 'shell', 'springboot', 'swift', 'terraform', 'typescript', 'yml', 'solidity', 'soway', 'nestjs', 'sway', 'jenkins', 'nodejs']
+application_type=['frontend', 'backend', 'blockchain', 'contract', 'smartcontract', 'devops']
+
+follow_naming_convention_repo=[]
+notfollow_naming_convention_repo=[]
+
+for repo in repo_name:
+    repo_name_replace=repo.replace("-", " ")
+    repo_list=repo_name_replace.split()
+    # print(repo_list)
+    if repo_list[0] in platform:
+        a=0
+    else:
+        notfollow_naming_convention_repo.append(repo)
+        continue
+    if repo_list[1] in technology:
+        a=0
+    else:
+        notfollow_naming_convention_repo.append(repo)
+        continue
+    follow_naming_convention_repo.append(repo)
+
+print(notfollow_naming_convention_repo)
+
+# for slack in notfollow_naming_convention_repo:
+#     slack_info = "{}".format(slack)
+#     # slack_info = "{}\nPlease do not use Uppercase in repo name, need to follow GitOps Naming convention:- https://rapidinnovation.atlassian.net/l/c/ZpFEaZiM ".format(slack)
+#     post_message_to_slack(slack_info)
+# post_message_to_slack("Not Followed as per GitOps Naming Convention, <platform>-<technology>-<application-type>-<project-name>, Please Need to follow GitOps Naming convention:- https://rapidinnovation.atlassian.net/l/c/tUSqSuCT\n If anything missing touch with #devop-help")
